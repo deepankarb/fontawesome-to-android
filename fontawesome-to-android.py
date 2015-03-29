@@ -555,6 +555,14 @@ class ListUpdateAction(argparse.Action):
 
 
 def export_icon(icon, size, filename, font, color, margin, dirname):
+
+    # Convert hyphnes (-) to underscores (_) since the former are not allowed in android drawables
+    filename = filename.replace("-","_")
+    # Handle special case
+    if filename == 'try.png':
+    # Save file
+        filename = 'fa_try.png'
+
     print("Exporting icon \"%s\" as %s (%ix%i pixels)" %
                 (icon, dirname + "/" + filename, size, size))
 
