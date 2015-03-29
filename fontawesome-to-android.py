@@ -563,7 +563,8 @@ def export_icon(icon, size, filename, font, color, margin, dirname):
     # Save file
         filename = 'fa_try.png'
 
-    print("Exporting icon \"%s\" as %s (%ix%i pixels)" %
+    if not quiet:
+        print("Exporting icon \"%s\" as %s (%ix%i pixels)" %
                 (icon, dirname + "/" + filename, size, size))
 
     image = Image.new("RGBA", (size, size), color=(0,0,0,0))
@@ -666,6 +667,7 @@ if __name__ == '__main__':
             help="Icon margin in pixels for mdpi")
     parser.add_argument("--buckets", type=str, nargs="*", default=[ "mdpi", "hdpi", "xhdpi", "xxhdpi" ],
             help="The density buckets to generate icons for. Default is mdpi, hdpi, xhdpi, xxhdpi")
+    parser.add_argument("-q", "--quiet", help="Suppress output. Any errors are still sent to stderr.", action="store_true")
 
     args = parser.parse_args()
     icon = args.icon
@@ -674,6 +676,7 @@ if __name__ == '__main__':
     color = args.color
     margin = args.margin
     buckets = args.buckets
+    quiet = args.quiet
 
     if args.font:
         if not path.isfile(args.font) or not access(args.font, R_OK):
@@ -717,7 +720,8 @@ if __name__ == '__main__':
         dirname = "drawable-" + bucket
 
         if not path.exists(dirname):
-            print "Creating dir " + dirname
+            if not quiet:
+                print "Creating dir " + dirname
             makedirs(dirname)
         
         for icon in selected_icons:
